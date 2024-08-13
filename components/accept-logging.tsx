@@ -57,7 +57,7 @@ export function AcceptLogging() {
         <AlertDialogHeader>
           <AlertDialogTitle>Innan du använder DietistGPT</AlertDialogTitle>
           <AlertDialogDescription>
-            DietistGPT är en forskningsprototyp från Göteborgs universitet,
+            DietistGPT är en forskningsprototyp från Göteborgs Universitet,
             skapad av Appademin.
             <br></br>
             <br></br>

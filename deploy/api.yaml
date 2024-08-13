@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dietistgpt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dietistgpt
+  template:
+    metadata:
+      labels:
+        app: dietistgpt
+    spec:
+      containers:
+        - name: dietistgpt
+          image: 'appademin/dietist-gpt:0.1.0'
+          ports:
+            - containerPort: 3000
+              name: web
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: AZURE_OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dietistgpt-secret
+                  key: azure-openai-api-key
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dietistgpt-service
+spec:
+  selector:
+    app: dietistgpt
+  ports:
+    - protocol: TCP
+      port: 3000
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: dietistgpt-route
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  host: dietistgpt.prod.appadem.in
+  to:
+    kind: Service
+    name: dietistgpt-service
+    weight: 100
+  port:
+    targetPort: 3000
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

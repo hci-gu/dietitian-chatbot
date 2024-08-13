@@ -7,18 +7,9 @@ import { Patient, patients } from '@/lib/patients'
 
 // example messages for a dietitian to start a conversation with a patient
 const exampleMessages = [
-  {
-    heading: 'Hej, hur mår du?',
-    message: 'Hej, hur mår du?'
-  },
-  {
-    heading: 'Hej, vad har du ätit idag?',
-    message: 'Hej, vad har du ätit idag?'
-  },
-  {
-    heading: 'Hej, vad har du för matallergier?',
-    message: 'Hej, vad har du för matallergier?'
-  }
+  'Hej, hur mår du?',
+  'Hej, vad har du ätit idag?',
+  'Hej, varför har du kommit hit idag?'
 ]
 
 export function EmptyScreen({
@@ -63,10 +54,10 @@ export function EmptyScreen({
               key={index}
               variant="link"
               className="h-auto p-0 text-base"
-              onClick={() => setInput(message.message)}
+              onClick={() => setInput(message)}
             >
               <IconArrowRight className="mr-2 text-muted-foreground" />
-              {message.heading}
+              {message}
             </Button>
           ))}
         </div>
