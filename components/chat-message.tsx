@@ -10,16 +10,18 @@ import { CodeBlock } from '@/components/ui/codeblock'
 import { MemoizedReactMarkdown } from '@/components/markdown'
 import { IconOpenAI, IconSpinner, IconUser } from '@/components/ui/icons'
 import { ChatMessageActions } from '@/components/chat-message-actions'
+import { Patient } from '@/lib/pocketbase'
 
 export interface ChatMessageProps {
   message: Message
+  patient: Patient
 }
 
 function stripReferences(message: string) {
   return message.replace(/\s*\[doc\d+\]/g, '')
 }
 
-export function ChatMessage({ message, ...props }: ChatMessageProps) {
+export function ChatMessage({ message, patient, ...props }: ChatMessageProps) {
   return (
     <div
       className={cn('group relative mb-4 flex items-start md:-ml-12')}
@@ -27,13 +29,14 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
     >
       <div
         className={cn(
-          'flex size-8 shrink-0 select-none items-center justify-center rounded-md border shadow',
-          message.role === 'user'
-            ? 'bg-background'
-            : 'bg-primary text-primary-foreground'
+          'flex size-8 shrink-0 select-none items-center justify-center rounded-full border shadow overflow-hidden bg-background'
         )}
       >
-        {message.role === 'user' ? <IconUser /> : <IconOpenAI />}
+        {message.role === 'user' ? (
+          <IconUser />
+        ) : (
+          <img className="w-8 h-8" src={patient.image} />
+        )}
       </div>
       <div className="flex-1 px-1 ml-4 space-y-2 overflow-hidden">
         <MemoizedReactMarkdown
@@ -89,8 +92,8 @@ export function ChatMessageLoading({ ...props }) {
       className={cn('group relative mb-4 flex items-start md:-ml-12')}
       {...props}
     >
-      <div className="flex size-8 shrink-0 select-none items-center justify-center rounded-md border shadow bg-primary text-primary-foreground">
-        <IconOpenAI />
+      <div className="flex size-8 shrink-0 select-none items-center justify-center rounded-full border shadow bg-background overflow-hidden">
+        <img className="w-8 h-8" src={props.patient.image} />
       </div>
 
       <div className="p-2 ml-4 flex scale-125">

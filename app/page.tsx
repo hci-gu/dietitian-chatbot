@@ -1,5 +1,3 @@
-'use client'
-
 import { SelectPatient } from '@/components/select-patient'
 
 export default function IndexPage() {

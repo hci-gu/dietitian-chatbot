@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { usePathname } from 'next/navigation'
 import { getUserId, state } from '@/app/actions'
-import { Patient } from '@/lib/patients'
+import { Patient } from '@/lib/pocketbase'
 
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
@@ -43,7 +43,7 @@ export function Chat({ id, initialMessages, patient, className }: ChatProps) {
         'x-user-id': getUserId(),
         'x-chat-id': id ?? ''
       },
-      onResponse(response) {
+      onResponse(response: any) {
         if (response.status === 401) {
           toast.error(response.statusText)
         }
@@ -74,7 +74,11 @@ export function Chat({ id, initialMessages, patient, className }: ChatProps) {
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
         {messages.length ? (
           <>
-            <ChatList messages={messages} isLoading={isLoading} />
+            <ChatList
+              messages={messages}
+              isLoading={isLoading}
+              patient={patient}
+            />
             <ChatScrollAnchor trackVisibility={isLoading} />
             {/* <div className="fixed top-20 right-5 invisible lg:visible">
               <div

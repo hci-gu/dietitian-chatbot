@@ -16,16 +16,53 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { IconSpinner, IconTrash } from '@/components/ui/icons'
+import { IconDownload, IconSpinner, IconTrash } from '@/components/ui/icons'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
+import { state } from '@/app/actions'
 
 interface SidebarActionsProps {
   chat: Chat
   removeChat: (args: { id: string; path: string }) => ServerActionResult<void>
+}
+
+function DownloadChatButton({ chatId }: { chatId: string }) {
+  const { chats } = state((s: any) => ({
+    chats: s.chats,
+    clearChats: s.clearChats
+  }))
+
+  const download = () => {
+    const chat = chats.find((chat: Chat) => chat.id === chatId)
+
+    // create txt file of chat
+    const txtContent = ``
+    const messages = chat.messages.map(
+      (message: any) => `${message.role}: ${message.content}`
+    )
+    const chatContent = messages.join('\n')
+
+    const blob = new Blob([chatContent], {})
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${chat.title}.txt`
+    a.click()
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      className="size-6 p-0 hover:bg-background"
+      onClick={download}
+    >
+      <IconDownload />
+      <span className="sr-only">Spara</span>
+    </Button>
+  )
 }
 
 export function SidebarActions({ chat, removeChat }: SidebarActionsProps) {
@@ -35,7 +72,7 @@ export function SidebarActions({ chat, removeChat }: SidebarActionsProps) {
 
   return (
     <>
-      <div className="space-x-1">
+      <div className="space-x-2">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -49,6 +86,12 @@ export function SidebarActions({ chat, removeChat }: SidebarActionsProps) {
             </Button>
           </TooltipTrigger>
           <TooltipContent>Ta bort chatt</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DownloadChatButton chatId={chat.id} />
+          </TooltipTrigger>
+          <TooltipContent>Spara chatt</TooltipContent>
         </Tooltip>
       </div>
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

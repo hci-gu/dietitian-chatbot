@@ -1,11 +1,44 @@
 import { IconArrowRight } from '@/components/ui/icons'
-import { patients } from '@/lib/patients'
+import { getPatients, Patient } from '@/lib/pocketbase'
 import Link from 'next/link'
 
-export function SelectPatient() {
+const PatientCard = ({ patient }: { patient: Patient }) => {
   return (
-    <div className="mx-auto max-w-2xl px-4">
-      <div className="rounded-lg border bg-background p-8">
+    <Link
+      href={`/patient/${patient.id}`}
+      className="block bg-white border border-gray-200 rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow"
+    >
+      <div className="flex items-center">
+        <img
+          className="w-16 h-16 rounded-full border border-gray-200 dark:border-gray-800"
+          src={patient.image}
+        />
+        <div className="ml-4 flex flex-col flex-1">
+          <span className="text-lg font-medium text-gray-900">
+            {patient.name}
+          </span>
+          <span className="text-sm text-gray-600">{patient.description}</span>
+        </div>
+        <IconArrowRight className="w-5 h-5 text-gray-500" />
+      </div>
+      {patient.remittance && (
+        <p
+          className="mt-2 text-sm text-gray-700"
+          dangerouslySetInnerHTML={{
+            __html: patient.remittance
+          }}
+        ></p>
+      )}
+    </Link>
+  )
+}
+
+export async function SelectPatient() {
+  const patients = await getPatients()
+
+  return (
+    <div className="mx-auto max-w-screen-2xl">
+      <div className="p-8">
         <h1 className="mb-2 text-lg font-semibold">
           Välkommen till DietistGPT
         </h1>
@@ -14,24 +47,9 @@ export function SelectPatient() {
           Börja en konversation genom att välja en av följande patienter att
           prata med
         </p>
-        <div className="mt-4 flex flex-col items-start space-y-4">
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {patients.map((patient, index) => (
-            <Link
-              href={`/patient/${patient.slug}`}
-              key={index}
-              className="h-auto p-0 flex items-center text-base w-full hover:bg-gray-100"
-            >
-              <IconArrowRight className="text-muted-foreground w-4 h-4" />
-              <div className="ml-2 flex flex-col w-11/12">
-                <span>
-                  <strong>{patient.name}</strong>
-                  <span className="ml-2 text-sm text-muted-foreground">
-                    ({patient.description})
-                  </span>
-                </span>
-                <span className="text-sm">{patient.remittance}</span>
-              </div>
-            </Link>
+            <PatientCard key={index} patient={patient} />
           ))}
         </div>
       </div>

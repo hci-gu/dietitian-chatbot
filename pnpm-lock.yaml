@@ -38,6 +38,7 @@ specifiers:
   next-auth: 5.0.0-beta.4
   next-themes: ^0.2.1
   openai: ^4.26.1
+  pocketbase: ^0.25.2
   postcss: ^8.4.33
   prettier: ^3.2.4
   react: ^18.2.0
@@ -82,6 +83,7 @@ dependencies:
   next-auth: 5.0.0-beta.4_next@14.1.0+react@18.3.1
   next-themes: 0.2.1_oiusliestrifxvbsllppqxfbj4
   openai: 4.50.0
+  pocketbase: 0.25.2
   react: 18.3.1
   react-dom: 18.3.1_react@18.3.1
   react-hot-toast: 2.4.1_nnrd3gsncyragczmpvfhocinkq
@@ -4264,6 +4266,10 @@ packages:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
     dev: true
+
+  /pocketbase/0.25.2:
+    resolution: {integrity: sha512-ONZl1+qHJMnhR2uacBlBJ90lm7njtL/zy0606+1ROfK9hSL4LRBRc8r89rMcNRzPzRqCNyoFTh2Qg/lYXdEC1w==}
+    dev: false
 
   /possible-typed-array-names/1.0.0:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
